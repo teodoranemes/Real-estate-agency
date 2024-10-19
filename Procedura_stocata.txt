@@ -1,0 +1,14 @@
+DROP PROCEDURE GetSpatiuByAdresa;
+
+CREATE DEFINER =`ROOT`@`LOCALHOST` PROCEDURE `GETSPATIUBYADRESA`
+(IN ADRESAINPUT VARCHAR(255)) BEGIN SET 
+	SET
+	    @sql_query = CONCAT(
+	        "SELECT * FROM Spatiu WHERE adresa LIKE '",
+	        adresaInput,
+	        "%' ORDER BY zona ASC, suprafata DESC;"
+	    );
+	PREPARE stmt FROM @sql_query;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+	END

@@ -1,0 +1,86 @@
+DROP TABLE IF EXISTS Oferta;
+DROP TABLE IF EXISTS Agentie;
+DROP TABLE IF EXISTS Spatiu;
+DROP TABLE IF EXISTS Tip;
+DROP TABLE IF EXISTS Exceptii;
+DROP VIEW IF EXISTS Oferte_AgentieRoyal;
+
+CREATE TABLE Agentie (
+	id_agentie NUMBER(5,0),
+	nume VARCHAR(100)
+);
+
+CREATE TABLE Spatiu (
+	id_spatiu NUMBER(5,0),
+	adresa VARCHAR(100),
+	zona NUMBER(5,0),
+	suprafata NUMBER(5,0),
+	id_tip NUMBER(5,0)
+);
+
+CREATE TABLE Tip(
+	id_tip NUMBER(5,0),
+	denumire VARCHAR(100),
+	caracteristici VARCHAR(100)
+);
+
+CREATE TABLE Oferta(
+	id_agentie NUMBER(5,0),
+	id_spatiu NUMBER(5,0),
+	vanzare CHAR(1),
+	pret NUMBER(10,0),
+	moneda VARCHAR(3)
+);
+
+
+ALTER TABLE Agentie ADD PRIMARY KEY (id_agentie);
+ALTER TABLE Spatiu ADD PRIMARY KEY (id_spatiu);
+ALTER TABLE Tip ADD PRIMARY KEY (id_tip);
+
+ALTER TABLE Spatiu ADD FOREIGN KEY (id_tip) REFERENCES Tip(id_tip);
+ALTER TABLE Oferta ADD FOREIGN KEY (id_agentie) REFERENCES Agentie(id_agentie);
+ALTER TABLE Oferta ADD FOREIGN KEY (id_spatiu) REFERENCES Spatiu(id_spatiu);
+
+ALTER TABLE Agentie ADD (email VARCHAR2(100));
+
+ALTER TABLE Spatiu ADD CONSTRAINT check_suprafata CHECK(suprafata BETWEEN 5 AND 200);
+
+ALTER TABLE Oferta ADD CONSTRAINT check_pret CHECK(
+    (moneda = 'EUR' AND pret < 100000) OR moneda != 'EUR'
+);
+
+
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (1, 'Special', 'special@gmail.com');
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (101, 'Remax', 'remax@gmail.com');
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (201, 'AgentieRoyal', 'royal@gmail.com');
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (301, 'Napoca', 'napoca@gmail.com');
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (401, 'Welt', 'welt@gmail.com');
+INSERT INTO Agentie (id_agentie, nume, email) VALUES (501, 'Consult', 'consult@gmail.com');
+
+INSERT INTO Tip (id_tip, denumire, caracteristici) VALUES(1, 'apartament', '3 camere');
+INSERT INTO Tip (id_tip, denumire, caracteristici) VALUES(2, 'casa', 'complet mobilat');
+INSERT INTO Tip (id_tip, denumire, caracteristici) VALUES(3, 'garaj', 'spatiu exterior');
+INSERT INTO Tip (id_tip, denumire, caracteristici) VALUES(4, 'vila', 'curte inclusa');
+INSERT INTO Tip (id_tip, denumire, caracteristici) VALUES(5, 'garsoniera', 'fara balcon');
+
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(1, 'Cluj Nicolae Iorga', 5, 60, 2);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(34, 'Cluj Aurel Vlaicu', 1, 80, 1);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(142, 'Gherla Avram Iancu', 2, 100, 1);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(225, 'Dej Iuliu Merca', 2, 50, 1);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(361, 'Cluj Calea Turzii', 3, 160, 2);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(400, 'Dej Grigore Moisil', 4, 32, 3);
+INSERT INTO Spatiu (id_spatiu, adresa, zona, suprafata, id_tip) VALUES(500, 'Turda Liviu Rebreanu', 4, 80, 3);
+
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(101, 225, 'N', 4, 'RON');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(201, 142, 'D', 70000, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(301, 142, 'D', 60000, 'RON');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(501, 225, 'N', 10000, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(101, 34, 'N', 15000, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(301, 400, 'N', 5, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(201, 400, 'D', 100, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(301, 400, 'D', 200, 'USD');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(301, 400, 'D', 30, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(401, 34, 'D', 60000, 'USD');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(101, 34, 'D', 60000, 'USD');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(1, 1, 'N', 500, 'EUR');
+INSERT INTO Oferta (id_agentie, id_spatiu, vanzare, pret, moneda) VALUES(201, 361, 'N', 500, 'EUR');
